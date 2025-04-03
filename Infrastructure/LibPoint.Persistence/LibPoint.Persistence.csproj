@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\LibPoint.Application\LibPoint.Application.csproj" />
     <ProjectReference Include="..\..\Core\LibPoint.Domain\LibPoint.Domain.csproj" />
   </ItemGroup>
 
