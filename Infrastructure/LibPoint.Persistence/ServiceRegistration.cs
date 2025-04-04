@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace LibPoint.Persistence
 {
-    public static class PersistenceServiceRegistration
+    public static class ServiceRegistration
     {
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
