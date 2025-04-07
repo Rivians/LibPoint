@@ -20,8 +20,8 @@ namespace LibPoint.Persistence
         {
             services.AddDbContext<LibPointDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("ConnectionString"));
-                //options.UseSqlServer(configuration["SqlServerOptions:ConnectionString"]);
+                // options.UseSqlServer(configuration.GetConnectionString("ConnectionString"));
+                options.UseSqlServer(configuration["SqlServerOptions:ConnectionString"]);
             });
 
 

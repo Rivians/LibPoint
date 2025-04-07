@@ -4,6 +4,9 @@ namespace LibPoint.Domain.Entities.Identity
 {
     public class AppUser : IdentityUser<Guid>
     {
+        public string Name { get; set; }
+        public string Surname { get; set; }
+
         public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedTime { get; set; }
         public bool IsDeleted { get; set; } = false;
