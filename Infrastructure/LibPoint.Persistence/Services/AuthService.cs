@@ -1,13 +1,9 @@
 ﻿using LibPoint.Application.Abstractions;
 using LibPoint.Application.Features.User.Commands;
+using LibPoint.Domain.Constants;
 using LibPoint.Domain.Entities.Identity;
 using LibPoint.Domain.Models.User;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibPoint.Persistence.Services
 {
@@ -18,9 +14,56 @@ namespace LibPoint.Persistence.Services
         private readonly RoleManager<AppRole> roleManager;
         private readonly ITokenService tokenService;
 
-        public Task<UserLoginModel> LoginAsync(LoginCommandRequest loginCommandRequst)
+        public async Task<UserLoginModel> LoginAsync(LoginCommandRequest loginCommandRequst)
         {
-            throw new NotImplementedException();
+            if (loginCommandRequst is null)
+                throw new NullReferenceException($"{nameof(LoginCommandRequest)} is null!");
+
+            AppUser? user = await userManager.FindByEmailAsync(loginCommandRequst.Email);
+            
+            if(user is null || user.IsDeleted is true)
+            {
+                return new()
+                {
+                    Errors = new string[] { "User not found" },
+                    Role = string.Empty,
+                    Token = string.Empty,
+                    UserModel = new()
+                };                
+            }
+
+            bool checkPasswordResult = await userManager.CheckPasswordAsync(user, loginCommandRequst.Password);
+
+            if(checkPasswordResult is false)
+            {
+                return new()
+                {
+                    Errors = new[] { "Invalid email or password!" },
+                    Role = string.Empty,
+                    Token = string.Empty,
+                    UserModel = new()
+                };
+            }
+
+            IList<string> userRole = await userManager.GetRolesAsync(user);
+
+            Token token = tokenService.GenerateToken(user);
+
+            return new()
+            {
+                UserModel = new()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    CreatedAtUtc = user.CreatedTime
+                },
+                Role = userRole.FirstOrDefault(),
+                Errors = new string[] {},
+                Token = token.AccessToken
+            };
         }
 
         public async Task<UserRegisterModel> RegisterAsync(RegisterCommandRequest registerCommandRequest, string? role = "User")
@@ -65,7 +108,7 @@ namespace LibPoint.Persistence.Services
                         Errors = new string[] { }
                     };
                 }
-                if (!addToRoleResult.Succeeded)
+                else
                 {
                     return new()
                     {

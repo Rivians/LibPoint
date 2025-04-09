@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\LibPoint.Application\LibPoint.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\LibPoint.Infrastructure\LibPoint.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\LibPoint.Persistence\LibPoint.Persistence.csproj" />
