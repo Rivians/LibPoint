@@ -1,20 +1,17 @@
 ﻿using LibPoint.Application.Abstractions;
 using LibPoint.Domain.Constants;
+using LibPoint.Infrastructure.Middlewares;
 using LibPoint.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LibPoint.Infrastructure
 {
-    public static class ServiceRegistration
+    public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
@@ -46,6 +43,15 @@ namespace LibPoint.Infrastructure
             services.AddScoped<ITokenService, TokenService>();
 
             return services;
+        }
+
+        public static IApplicationBuilder UseInfrastructureMiddlewares(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<PaginationMiddleware>();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            return app;
         }
     }
 }

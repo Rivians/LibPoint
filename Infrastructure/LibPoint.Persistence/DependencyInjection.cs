@@ -2,6 +2,7 @@
 using LibPoint.Domain.Entities.Identity;
 using LibPoint.Persistence.Data;
 using LibPoint.Persistence.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace LibPoint.Persistence
 {
-    public static class ServiceRegistration
+    public static class DependencyInjection
     {
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
@@ -28,9 +29,11 @@ namespace LibPoint.Persistence
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
+                options.User.AllowedUserNameCharacters = null;
 
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
 
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 3;
@@ -44,8 +47,10 @@ namespace LibPoint.Persistence
 
             // -- Services --
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }
-}
+        
+    }    
 }

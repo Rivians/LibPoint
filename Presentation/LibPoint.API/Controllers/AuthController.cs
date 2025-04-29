@@ -20,6 +20,7 @@ namespace LibPoint.API.Controllers
             _mediator = mediator;
         }
 
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginCommandRequest loginCommandRequest)
         {
             ResponseModel<UserLoginModel> responseModel = await _mediator.Send(loginCommandRequest);
@@ -30,6 +31,7 @@ namespace LibPoint.API.Controllers
             return Ok(responseModel);
         }
 
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterCommandRequest registerCommandRequest)
         {
             ResponseModel<UserRegisterModel> responseModel = await _mediator.Send(registerCommandRequest);

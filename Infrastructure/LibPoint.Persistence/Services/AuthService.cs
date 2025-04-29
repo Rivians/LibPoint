@@ -9,17 +9,25 @@ namespace LibPoint.Persistence.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<AppUser> userManager;
-        private readonly SignInManager<AppUser> signInManager;
-        private readonly RoleManager<AppRole> roleManager;
-        private readonly ITokenService tokenService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly ITokenService _tokenService;
+        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
+            _tokenService = tokenService;
+        }
+        
 
         public async Task<UserLoginModel> LoginAsync(LoginCommandRequest loginCommandRequst)
         {
             if (loginCommandRequst is null)
                 throw new NullReferenceException($"{nameof(LoginCommandRequest)} is null!");
 
-            AppUser? user = await userManager.FindByEmailAsync(loginCommandRequst.Email);
+            AppUser? user = await _userManager.FindByEmailAsync(loginCommandRequst.Email);
             
             if(user is null || user.IsDeleted is true)
             {
@@ -32,7 +40,7 @@ namespace LibPoint.Persistence.Services
                 };                
             }
 
-            bool checkPasswordResult = await userManager.CheckPasswordAsync(user, loginCommandRequst.Password);
+            bool checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginCommandRequst.Password);
 
             if(checkPasswordResult is false)
             {
@@ -45,9 +53,9 @@ namespace LibPoint.Persistence.Services
                 };
             }
 
-            IList<string> userRole = await userManager.GetRolesAsync(user);
+            IList<string> userRole = await _userManager.GetRolesAsync(user);
 
-            Token token = tokenService.GenerateToken(user);
+            Token token = _tokenService.GenerateToken(user);
 
             return new()
             {
@@ -77,16 +85,17 @@ namespace LibPoint.Persistence.Services
                 Surname = registerCommandRequest.Surname ?? string.Empty,
                 Email = registerCommandRequest.Email ?? string.Empty,
                 PhoneNumber = registerCommandRequest.PhoneNumber ?? string.Empty,
+                UserName = registerCommandRequest.Email ?? string.Empty
             };
 
-            IdentityResult userResult = await userManager.CreateAsync(appUser, registerCommandRequest.Password);
+            IdentityResult userResult = await _userManager.CreateAsync(appUser, registerCommandRequest.Password);
 
             if (userResult.Succeeded)
             {
-                bool userRoleExist = await roleManager.RoleExistsAsync(role);
+                bool userRoleExist = await _roleManager.RoleExistsAsync(role);
                 if (!userRoleExist)
                 {
-                    IdentityResult roleResult = await roleManager.CreateAsync(new AppRole { Name = role });
+                    IdentityResult roleResult = await _roleManager.CreateAsync(new AppRole { Name = role });
                     if (!roleResult.Succeeded)
                     {
                         return new()
@@ -97,7 +106,7 @@ namespace LibPoint.Persistence.Services
                     }
                 }
 
-                IdentityResult addToRoleResult = await userManager.AddToRoleAsync(appUser, role);
+                IdentityResult addToRoleResult = await _userManager.AddToRoleAsync(appUser, role);
                 if (addToRoleResult.Succeeded)
                 {
                     return new()
