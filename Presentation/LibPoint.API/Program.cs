@@ -1,6 +1,7 @@
 using LibPoint.Infrastructure;
 using LibPoint.Persistence;
-using LibPoint.Application; 
+using LibPoint.Application;
+using LibPoint.Domain.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
 builder.Services.AddPersistenceServices(builder.Configuration);
 

@@ -55,7 +55,7 @@ namespace LibPoint.Persistence.Services
 
             IList<string> userRole = await _userManager.GetRolesAsync(user);
 
-            Token token = _tokenService.GenerateToken(user);
+            Token? token = _tokenService.GenerateToken(user);
 
             return new()
             {
@@ -78,7 +78,7 @@ namespace LibPoint.Persistence.Services
         {
             if (registerCommandRequest is null)
                 throw new NullReferenceException($"{nameof(RegisterCommandRequest)} is null!");
-
+            
             AppUser appUser = new()
             {
                 Name = registerCommandRequest.Name ?? string.Empty,

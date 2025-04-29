@@ -15,10 +15,10 @@ namespace LibPoint.Infrastructure.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly JwtOptions jwtOptions;
+        private readonly JwtOptions _jwtOptions;
         public TokenService(IOptions<JwtOptions> jwtOptions)
         {
-            this.jwtOptions = jwtOptions.Value;
+            _jwtOptions = jwtOptions.Value;
         }
 
         public Token GenerateToken(AppUser appUser)
@@ -30,14 +30,14 @@ namespace LibPoint.Infrastructure.Services
                 new Claim("Email", appUser.Email)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expires = DateTime.UtcNow.AddMinutes(jwtOptions.ExpiryInMinutes);
+            var expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiryInMinutes);
 
             var securityToken = new JwtSecurityToken(
-                issuer: jwtOptions.Issuer,
-                audience: jwtOptions.Audience,
+                issuer: _jwtOptions.Issuer,
+                audience: _jwtOptions.Audience,
                 claims: claims,
                 expires: expires,
                 signingCredentials: signingCredentials
