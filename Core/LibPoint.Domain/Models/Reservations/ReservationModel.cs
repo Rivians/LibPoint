@@ -1,16 +1,19 @@
-﻿using LibPoint.Domain.Entities.Base;
-using LibPoint.Domain.Entities.Enums;
+﻿using LibPoint.Domain.Entities.Enums;
 using LibPoint.Domain.Entities.Identity;
+using LibPoint.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibPoint.Domain.Models.User;
+using LibPoint.Domain.Models.Seats;
 
-namespace LibPoint.Domain.Entities
+namespace LibPoint.Domain.Models.Reservations
 {
-    public class Reservation : BaseEntity
-    {        
+    public class ReservationModel
+    {
+        public Guid Id { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public Session Session { get; set; }
@@ -19,8 +22,8 @@ namespace LibPoint.Domain.Entities
         public bool? EndedBySession { get; set; } = false;
 
         public Guid AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public UserModel AppUser { get; set; }
         public Guid SeatId { get; set; }
-        public Seat Seat { get; set; }
+        public SeatModel Seat { get; set; }
     }
 }
