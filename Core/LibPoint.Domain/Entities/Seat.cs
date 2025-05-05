@@ -11,8 +11,6 @@ namespace LibPoint.Domain.Entities
     {
         public string SeatNumber { get; set; }
         public bool IsReserved { get; set; } = false;
-        public int? Floor { get; set; } // kat 1 -- kat 2 vs..
-        public string? Section { get; set; } // sessiz alan -- çalışma alanı vs..
         public Guid? CurrentAppUserId { get; set; }  // eğerki sandalye dolu ise 
         public Guid? CurrentReservationId { get; set; }  
 

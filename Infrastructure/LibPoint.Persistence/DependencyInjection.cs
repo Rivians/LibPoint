@@ -1,6 +1,7 @@
 ﻿using LibPoint.Application.Abstractions;
 using LibPoint.Domain.Entities.Identity;
 using LibPoint.Persistence.Data;
+using LibPoint.Persistence.Repositories;
 using LibPoint.Persistence.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -48,6 +49,10 @@ namespace LibPoint.Persistence
             // -- Services --
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAuthService, AuthService>();
+
+
+            // -- Repositories --
+            services.AddScoped<ISeatRepository, SeatRepository>();
 
             return services;
         }
