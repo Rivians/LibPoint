@@ -15,8 +15,9 @@ namespace LibPoint.Domain.Entities
         public DateTime EndTime { get; set; }
         public Session Session { get; set; }
         public int Duration { get; set; }           // dakika veya saat olucak belirlemedik.
+        public bool IsActive { get; set; } = false;
         public bool CheckIn { get; set; } = false;
-        public bool? EndedBySession { get; set; } = false;
+        public bool EndedBySession { get; set; } = false;
 
         public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }
