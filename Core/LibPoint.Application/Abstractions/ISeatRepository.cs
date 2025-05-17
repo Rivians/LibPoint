@@ -8,7 +8,7 @@ namespace LibPoint.Application.Abstractions
 {
     public interface ISeatRepository
     {
-        Task<bool> SetReservedSeatAsync(Guid seatId, Guid reservationId, Guid appUserId);
-        Task<bool> SetFreeSeatAsync(Guid seatId);
+        Task<bool> SetSeatReservedAsync(Guid appUserId, Guid seatId, Guid reservationId);
+        Task<bool> SetSeatFreeAsync(Guid seatId);
     }
 }

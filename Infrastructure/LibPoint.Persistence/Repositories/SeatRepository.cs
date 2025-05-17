@@ -1,5 +1,6 @@
 ﻿using LibPoint.Application.Abstractions;
 using LibPoint.Persistence.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace LibPoint.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<bool> SetFreeSeatAsync(Guid seatId)
+        public async Task<bool> SetSeatFreeAsync(Guid seatId)
         {
             var seat = await _context.Seats.FindAsync(seatId);
 
@@ -30,11 +31,22 @@ namespace LibPoint.Persistence.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> SetReservedSeatAsync(Guid seatId, Guid reservationId, Guid appUserId)
+        public async Task<bool> SetSeatReservedAsync(Guid appUserId, Guid seatId, Guid reservationId)
         {
-            var seat = await _context.Seats.FindAsync(seatId);
+            //var seatData = await _context.Seats
+            //    .Where(s => s.Id == seatId && !s.IsReserved)
+            //    .Select(s => new
+            //    {
+            //        s,
+            //        appUser = _context.AppUsers.FirstOrDefault(u => u.Id == appUserId),
+            //        reservation = _context.Reservations.FirstOrDefault(r => r.Id == reservationId)
+            //    }).FirstOrDefaultAsync();
 
-            if (seat is null || seat.IsReserved)
+            var seat = await _context.Seats.FindAsync(seatId);
+            var appUser = await _context.AppUsers.FindAsync(appUserId);
+            var reservation = await _context.Reservations.FindAsync(reservationId);
+
+            if (seat is null || seat.IsReserved || appUser is null || reservation is null)
                 return false;
 
             seat.IsReserved = true;

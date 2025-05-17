@@ -13,6 +13,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Presentation/LibPoint.API/LibPoint.API.csproj", "Presentation/LibPoint.API/"]
+COPY ["Core/LibPoint.Application/LibPoint.Application.csproj", "Core/LibPoint.Application/"]
+COPY ["Core/LibPoint.Domain/LibPoint.Domain.csproj", "Core/LibPoint.Domain/"]
+COPY ["Infrastructure/LibPoint.Infrastructure/LibPoint.Infrastructure.csproj", "Infrastructure/LibPoint.Infrastructure/"]
+COPY ["Infrastructure/LibPoint.Persistence/LibPoint.Persistence.csproj", "Infrastructure/LibPoint.Persistence/"]
 RUN dotnet restore "./Presentation/LibPoint.API/LibPoint.API.csproj"
 COPY . .
 WORKDIR "/src/Presentation/LibPoint.API"

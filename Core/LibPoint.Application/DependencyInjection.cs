@@ -12,7 +12,7 @@ namespace LibPoint.Application
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            services.AddHostedService<ReservationBackgroundService>();
+            //services.AddHostedService<ReservationBackgroundService>();
 
             return services;
         }
