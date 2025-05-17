@@ -2,7 +2,6 @@
 using LibPoint.Application.Features.Seats.Queries;
 using LibPoint.Domain.Models.Responses;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibPoint.API.Controllers
@@ -16,6 +15,18 @@ namespace LibPoint.API.Controllers
         {
             _mediator = mediator;
         }
+
+        [HttpGet("get-seat-by-id")]
+        public async Task<IActionResult> GetSeatById([FromHeader] Guid seatId)
+        {
+            var response = await _mediator.Send(new GetSeatByIdCommandRequest(seatId));
+
+            if (response.Success is false)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
 
         [HttpGet("get-seat-list")]
         public async Task<IActionResult> GetSeatList()
