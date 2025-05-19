@@ -1,5 +1,6 @@
 ﻿using LibPoint.Application.Features.Reservations.Commands;
 using LibPoint.Application.Features.Reservations.Queries;
+using LibPoint.Domain.Entities.Enums;
 using LibPoint.Domain.Models.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -29,25 +30,33 @@ namespace LibPoint.API.Controllers
         }
 
         [HttpPost("reserve-seat-with-transaction")]
-        public async Task<IActionResult> ReserveSeatWithTransaction([FromHeader] Guid appUserId, [FromHeader] Guid seatId, [FromHeader] Guid reservationId)
+        public async Task<IActionResult> ReserveSeatWithTransaction([FromBody] ReserveSeatWithTransactionCommandRequest request)
         {
-            if (appUserId == Guid.Empty || seatId == Guid.Empty || reservationId == Guid.Empty)
-                return BadRequest(new ResponseModel<bool>("One of ID that you request is invalid");
+            int[] sessions = [0, 1, 2];
 
-            var result = await _mediator.Send();
-            // return
+            if (!sessions.Contains(request.Session))
+                return BadRequest("Just send the value of session 0, 1 or 2");
+
+            if (request.AppUserId == Guid.Empty || request.SeatId == Guid.Empty)
+                return BadRequest(new ResponseModel<bool>("One of ID that you request is invalid"));
+
+            var responseModel = await _mediator.Send(request);
+
+            return responseModel.Success ? Ok(responseModel) : BadRequest(responseModel);
         }
 
+        /// <summary>
+        /// sadece admin panelinde manuel olarak işlem yapılmak istenildiğinde. Güncel olarak bunun yerine transaction olan versiyonu kullan.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("create-reservation")]
         public async Task<IActionResult> CreateReservation([FromBody] CreateReservationCommandRequest request, CancellationToken cancellationToken)
         {
             var responseModel = await _mediator.Send(request);
 
-            if (responseModel.Success)
-                return Ok(responseModel);
-            else
-                return BadRequest(responseModel);
+            return responseModel.Success ? Ok(responseModel) : BadRequest(responseModel);
         }
+
 
         [HttpGet("get-expired-reservations")]
         public async Task<IActionResult> GetExpiredReservations()

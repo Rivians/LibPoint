@@ -19,5 +19,6 @@ namespace LibPoint.Application.Abstractions
         bool Update(T entity);
         bool Delete(T entity);
         Task<bool> SaveChangesAsync();
+        Task<bool> ExecuteTransactionAsync(Func<Task<bool>> operation);
     }
 }

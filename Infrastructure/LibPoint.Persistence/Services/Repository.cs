@@ -39,6 +39,30 @@ namespace LibPoint.Persistence.Services
             return entityEntry.State == EntityState.Deleted;
         }
 
+        public async Task<bool> ExecuteTransactionAsync(Func<Task<bool>> operation)
+        {
+            using(var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var result = await operation();
+                    if(result is false)
+                    {
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
+
+                    await transaction.CommitAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, bool tracking = true, params Expression<Func<T, object>>[] includeEntity)
         {
             var query = Table.AsQueryable();

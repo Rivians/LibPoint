@@ -1,4 +1,5 @@
-﻿using LibPoint.Domain.Models.Responses;
+﻿using LibPoint.Domain.Entities.Enums;
+using LibPoint.Domain.Models.Responses;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,7 @@ namespace LibPoint.Application.Features.Reservations.Commands
     {
         public Guid AppUserId { get; set; }
         public Guid SeatId { get; set; }
-        public Guid ReservationId { get; set; }
-        public ReserveSeatWithTransactionCommandRequest(Guid appUserId, Guid seatId, Guid reservationId)
-        {
-            AppUserId = appUserId;
-            SeatId = seatId;
-            ReservationId = reservationId;
-        }
+        public int Session { get; set; }
+        public int Duration { get; set; }
     }
 }
