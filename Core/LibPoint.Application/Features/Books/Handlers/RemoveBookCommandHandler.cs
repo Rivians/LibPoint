@@ -24,7 +24,7 @@ namespace LibPoint.Application.Features.Books.Handlers
 
         public async Task<ResponseModel<Guid>> Handle(RemoveBookCommandRequest request, CancellationToken cancellationToken)
         {
-            var deletingBook = await _repository.GetAsync(x => x.Id == request.Id);
+            var deletingBook = await _repository.GetAsync(x => x.Id == request.Id,tracking:true);
             if (deletingBook == null)
             {
                 return new ResponseModel<Guid>
@@ -32,7 +32,7 @@ namespace LibPoint.Application.Features.Books.Handlers
                     Success = false,
                     Data = Guid.Empty,
                     Messages = new[] { "Book not found." },
-                    StatusCode = 404
+                    
                 };
             }
 
@@ -44,7 +44,7 @@ namespace LibPoint.Application.Features.Books.Handlers
                     Success = false,
                     Data = Guid.Empty,
                     Messages = new[] { "Failed to delete the book." },
-                    StatusCode = 500
+                    
                 };
             }
 

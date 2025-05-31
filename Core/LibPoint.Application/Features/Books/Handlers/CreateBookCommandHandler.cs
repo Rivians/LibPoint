@@ -30,11 +30,16 @@ namespace LibPoint.Application.Features.Books.Handlers
                 Name = request.Name,
                 PublishedYear = request.PublishedYear,
                 Publisher = request.Publisher,
+                AuthorId = request.AuthorId,
 
             };
 
             var result = await _repository.AddAsync(newBook);
-            
+            if(!result)
+            {
+                return new ResponseModel<Guid>("Book could not be created", 500);
+            }
+
             var saveResult = await _repository.SaveChangesAsync();
 
             if(saveResult == false)
@@ -43,7 +48,7 @@ namespace LibPoint.Application.Features.Books.Handlers
             }
             else
             {
-                return new ResponseModel<Guid>(newBook.Id);
+                return new ResponseModel<Guid>(newBook.Id,200);
             }
 
 

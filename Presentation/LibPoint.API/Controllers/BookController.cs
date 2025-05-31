@@ -32,11 +32,11 @@ namespace LibPoint.API.Controllers
             return Ok(value);
         }
 
-        [HttpGet("RemoveBook")]
+        [HttpDelete("RemoveBook")]
         public async Task<IActionResult> RemoveBook(RemoveBookCommandRequest request)
         {
             var result = await _mediator.Send(request);
-            if (result.StatusCode != 200)
+            if (result.StatusCode == 200)
             {
                 return Ok(result);
             }
@@ -50,13 +50,13 @@ namespace LibPoint.API.Controllers
         public async Task<IActionResult> CreateBook(CreateBookCommandRequest request)
         {
             var result = await _mediator.Send(request);
-            if (result.StatusCode != 200)
+            if (result.StatusCode == 200)
             {
                 return Ok(result);
             }
             else
             {
-                return BadRequest(result);
+                return BadRequest("could not create a book");
             }
         }
 
@@ -64,7 +64,7 @@ namespace LibPoint.API.Controllers
         public async Task<IActionResult> UpdateBook(UpdateBookCommandRequest request)
         {
             var result = await _mediator.Send(request);
-            if (result.StatusCode != 200)
+            if (result.StatusCode == 200)
             {
                 return Ok(result);
             }
