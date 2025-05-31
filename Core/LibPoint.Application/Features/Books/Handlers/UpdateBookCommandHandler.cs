@@ -2,6 +2,8 @@
 using LibPoint.Application.Features.Books.Commands;
 using LibPoint.Application.Features.Review.Commands;
 using LibPoint.Domain.Entities;
+using LibPoint.Domain.Models.Responses;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +12,55 @@ using System.Threading.Tasks;
 
 namespace LibPoint.Application.Features.Books.Handlers
 {
-    public class UpdateBookCommandHandler
+    public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommandRequest, ResponseModel<Guid>>
     {
-        private readonly IBookRepository<Book> _repository;
+        private readonly IRepository<Book> _repository;
 
-        public UpdateBookCommandHandler(IBookRepository<Book> repository)
+        public UpdateBookCommandHandler(IRepository<Book> repository)
         {
             _repository = repository;
         }
 
-        public async Task Handle(UpdateBookCommand command)
+        public async Task<ResponseModel<Guid>> Handle(UpdateBookCommandRequest request, CancellationToken cancellationToken)
         {
-            var values = await _repository.GetByIdAsync(command.Id);
-            values.Publisher = command.Publisher;
-            values.PublishedYear = command.PublishedYear;
-            values.ISBN = command.ISBN;
-            values.Name = command.Name;
-            values.IsAvailable = command.IsAvailable;
-            await _repository.UpdateAsync(values);
+            var updatingBook = await _repository.GetAsync(x => x.Id == request.Id, tracking: true);
+            if (updatingBook == null)
+            {
+                return new ResponseModel<Guid>
+                {
+                    Success = false,
+                    Messages = new[] { "Book not found" },
+                    Data = Guid.Empty
+                };
+            }
+            else
+            {
+                updatingBook.Name = request.Name;
+                updatingBook.ISBN = request.ISBN;
+                updatingBook.IsAvailable = request.IsAvailable;
+                updatingBook.Publisher = request.Publisher;
+                updatingBook.PublishedYear = request.PublishedYear;
+
+                var updateResult = _repository.Update(updatingBook);
+                if (!updateResult)
+                {
+                    return new ResponseModel<Guid>
+                    {
+                        Success = false,
+                        Messages = new[] { "Failed to update the book" },
+                        Data = Guid.Empty
+                    };
+                }
+
+                await _repository.SaveChangesAsync();
+
+                return new ResponseModel<Guid>
+                {
+                    Success = true,
+                    Messages = new[] { "Book updated successfully" },
+                    Data = updatingBook.Id
+                };
+            }
         }
     }
 }

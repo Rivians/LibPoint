@@ -2,27 +2,62 @@
 using LibPoint.Application.Features.Books.Commands;
 using LibPoint.Application.Features.Review.Commands;
 using LibPoint.Domain.Entities;
+using LibPoint.Domain.Models.Responses;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace LibPoint.Application.Features.Books.Handlers
 {
-    public class RemoveBookCommandHandler
+    public class RemoveBookCommandHandler : IRequestHandler<RemoveBookCommandRequest, ResponseModel<Guid>>
     {
-        private readonly IBookRepository<Book> _repository;
+        private readonly IRepository<Book> _repository;
 
-        public RemoveBookCommandHandler(IBookRepository<Book> repository)
+        public RemoveBookCommandHandler(IRepository<Book> repository)
         {
             _repository = repository;
         }
 
-        public async Task Handle(RemoveBookCommand command)
+        public async Task<ResponseModel<Guid>> Handle(RemoveBookCommandRequest request, CancellationToken cancellationToken)
         {
-            var value = await _repository.GetByIdAsync(command.Id);
-            await _repository.RemoveAsync(value);
+            var deletingBook = await _repository.GetAsync(x => x.Id == request.Id);
+            if (deletingBook == null)
+            {
+                return new ResponseModel<Guid>
+                {
+                    Success = false,
+                    Data = Guid.Empty,
+                    Messages = new[] { "Book not found." },
+                    StatusCode = 404
+                };
+            }
+
+            var deleteResult = _repository.Delete(deletingBook);
+            if (!deleteResult)
+            {
+                return new ResponseModel<Guid>
+                {
+                    Success = false,
+                    Data = Guid.Empty,
+                    Messages = new[] { "Failed to delete the book." },
+                    StatusCode = 500
+                };
+            }
+
+            await _repository.SaveChangesAsync();
+
+            return new ResponseModel<Guid>
+            {
+                Success = true,
+                Data = deletingBook.Id,
+                Messages = new[] { "Book deleted successfully." },
+                StatusCode = 200
+            };
         }
     }
 }

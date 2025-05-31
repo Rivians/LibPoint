@@ -1,4 +1,7 @@
-﻿using LibPoint.Application.Features.Books.Handlers;
+﻿using LibPoint.Application.Features.Books.Commands;
+using LibPoint.Application.Features.Books.Handlers;
+using LibPoint.Application.Features.Books.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,40 +11,67 @@ namespace LibPoint.API.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly CreateBookCommandHandler createBookCommandHandler;
-        private readonly GetBookByIdQueryHandler getBookByIdQueryHandler;
-        private readonly GetBookQueryHandler getBookQueryHandler;
-        private readonly UpdateBookCommandHandler updateBookCommandHandler;
-        private readonly RemoveBookCommandHandler removeBookCommandHandler;
+        private readonly IMediator _mediator;
 
-        public BookController(CreateBookCommandHandler createBookCommandHandler, GetBookByIdQueryHandler getBookByIdQueryHandler, GetBookQueryHandler getBookQueryHandler, UpdateBookCommandHandler updateBookCommandHandler, RemoveBookCommandHandler removeBookCommandHandler)
+        public BookController(IMediator mediator)
         {
-            this.createBookCommandHandler = createBookCommandHandler;
-            this.getBookByIdQueryHandler = getBookByIdQueryHandler;
-            this.getBookQueryHandler = getBookQueryHandler;
-            this.updateBookCommandHandler = updateBookCommandHandler;
-            this.removeBookCommandHandler = removeBookCommandHandler;
+            _mediator = mediator;
         }
 
         [HttpGet("BookList")]
-        public async Task<IActionResult> BookList()
+        public async Task<IActionResult> GetBookList()
         {
-            var values = await getBookQueryHandler.Handle();
+            var values = await _mediator.Send(new GetBooksQueryRequest());
             return Ok(values);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBook(Guid id)
+        public async Task<IActionResult> GetBookById(Guid id)
         {
-            var value = await getBookByIdQueryHandler.Handle(new Application.Features.Books.Queries.GetBookByIdQuery(id));
+            var value = await _mediator.Send(new GetBookByIdQueryRequest(id));
             return Ok(value);
         }
 
         [HttpGet("RemoveBook")]
-        public async Task<IActionResult> RemoveBook(Guid id)
+        public async Task<IActionResult> RemoveBook(RemoveBookCommandRequest request)
         {
-            await removeBookCommandHandler.Handle(new Application.Features.Books.Commands.RemoveBookCommand(id));
-            return Ok("Book has been deleted succesfully");
+            var result = await _mediator.Send(request);
+            if (result.StatusCode != 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost("CreateBook")]
+        public async Task<IActionResult> CreateBook(CreateBookCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+            if (result.StatusCode != 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPut("UpdateBook")]
+        public async Task<IActionResult> UpdateBook(UpdateBookCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+            if (result.StatusCode != 200)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
         }
     }
 }

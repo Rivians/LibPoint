@@ -1,7 +1,11 @@
 ﻿using LibPoint.Application.Abstractions;
+using LibPoint.Application.Features.Books.Queries;
 using LibPoint.Application.Features.Books.Results;
 using LibPoint.Application.Features.Review.Results;
 using LibPoint.Domain.Entities;
+using LibPoint.Domain.Models.Books;
+using LibPoint.Domain.Models.Responses;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,27 +14,38 @@ using System.Threading.Tasks;
 
 namespace LibPoint.Application.Features.Books.Handlers
 {
-    public class GetBookQueryHandler
+    public class GetBookQueryHandler: IRequestHandler<GetBooksQueryRequest, ResponseModel<List<BookModel>>>
     {
-        private readonly IBookRepository<Book> _repository;
-
-        public GetBookQueryHandler(IBookRepository<Book> repository)
+        private readonly IRepository<Book> _repository;
+        public GetBookQueryHandler(IRepository<Book> repository)
         {
             _repository = repository;
         }
 
-        public async Task<List<GetBookQueryResult>> Handle()
+        public async Task<ResponseModel<List<BookModel>>> Handle(GetBooksQueryRequest request, CancellationToken cancellationToken )
         {
             var values = await _repository.GetAllAsync();
-            return values.Select(x => new GetBookQueryResult
+            if (values == null)
+            { 
+                return new ResponseModel<List<BookModel>>("No books found", 404);
+            }
+            else
             {
-                Id = x.Id,
-                IsAvailable = x.IsAvailable,
-                ISBN = x.ISBN,
-                Name = x.Name,
-                PublishedYear = x.PublishedYear,
-                Publisher = x.Publisher
-            }).ToList();
+                var bookmodel = values.Select(Book => new BookModel
+                {
+                    Id = Book.Id,
+                    Name = Book.Name,
+                    ISBN = Book.ISBN,
+                    IsAvailable = Book.IsAvailable,
+                    PublishedYear = Book.PublishedYear,
+                    Publisher = Book.Publisher,
+                    Categories = Book.Categories
+
+                }).ToList();
+                return new ResponseModel<List<BookModel>>(bookmodel);
+                
+            }
         }
+
     }
 }

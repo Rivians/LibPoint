@@ -2,6 +2,8 @@
 using LibPoint.Application.Features.Books.Commands;
 using LibPoint.Application.Features.Review.Commands;
 using LibPoint.Domain.Entities;
+using LibPoint.Domain.Models.Responses;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +12,48 @@ using System.Threading.Tasks;
 
 namespace LibPoint.Application.Features.Books.Handlers
 {
-    public class CreateBookCommandHandler
+    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommandRequest, ResponseModel<Guid>>
     {
-        private readonly IBookRepository<Book> _repository;
+        private readonly IRepository<Book> _repository;
 
-        public CreateBookCommandHandler(IBookRepository<Book> repository)
+        public CreateBookCommandHandler(IRepository<Book> repository)
         {
             _repository = repository;
         }
 
-        public async Task Handle(CreateBookCommand command)
+        public async Task<ResponseModel<Guid>> Handle(CreateBookCommandRequest request, CancellationToken cancellationToken)
         {
-            await _repository.CreateAsync(new Book
+            var newBook = new Book
             {
-                IsAvailable = command.IsAvailable,
-                ISBN = command.ISBN,
-                Name = command.Name,
-                PublishedYear = command.PublishedYear,
-                Publisher = command.Publisher,
+                IsAvailable = request.IsAvailable,
+                ISBN = request.ISBN,
+                Name = request.Name,
+                PublishedYear = request.PublishedYear,
+                Publisher = request.Publisher,
+
+            };
+
+            var result = await _repository.AddAsync(newBook);
+            
+            var saveResult = await _repository.SaveChangesAsync();
+
+            if(saveResult == false)
+            {
+                return new ResponseModel<Guid>("Book could not be created", 500);
+            }
+            else
+            {
+                return new ResponseModel<Guid>(newBook.Id);
+            }
+
+
                 
-            });
+            
+
         }
+
+
+
+
     }
 }
