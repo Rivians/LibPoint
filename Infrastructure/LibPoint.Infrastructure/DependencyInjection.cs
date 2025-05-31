@@ -2,6 +2,7 @@
 using LibPoint.Domain.Constants;
 using LibPoint.Infrastructure.Middlewares;
 using LibPoint.Infrastructure.Services;
+using LibPoint.Infrastructure.Services.Background;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +42,8 @@ namespace LibPoint.Infrastructure
             // -- Services --
 
             services.AddScoped<ITokenService, TokenService>();
+
+            services.AddHostedService<ReservationBackgroundService>();
 
             return services;
         }

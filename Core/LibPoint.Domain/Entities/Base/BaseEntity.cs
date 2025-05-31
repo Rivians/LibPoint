@@ -17,8 +17,8 @@ namespace LibPoint.Domain.Entities.Base
 
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
-        public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedTime { get; set; }
+        public DateTime? CreatedTime { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedTime { get; set; }
         public bool IsDeleted { get; set; } = false;
     }
 }

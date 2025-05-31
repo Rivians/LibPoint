@@ -77,10 +77,10 @@ namespace LibPoint.API.Controllers
         [HttpGet("get-active-reservations-by-sessions")]
         public async Task<IActionResult> GetActiveReservationsBySessions(int session)       // admin paneli için
         {
-            int[] sessions = [1, 2, 3];
+            int[] sessions = [0, 1, 2];
 
             if (!sessions.Contains(session))
-                return BadRequest("Just send the value of session 1, 2 or 3");
+                return BadRequest("Just send the value of session 0, 1 or 2");
 
             var response = await _mediator.Send(new GetActiveReservationsBySessionQueryRequest(session));
 

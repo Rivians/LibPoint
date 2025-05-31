@@ -5,7 +5,8 @@ using MediatR;
 namespace LibPoint.Application.Features.Reservations.Commands
 {
     public class CreateReservationCommandRequest : IRequest<ResponseModel<Guid>>
-    {
+    {        
+
         public Guid AppUserId { get; set; }
         public Guid SeatId { get; set; }
         public Session Session { get; set; }

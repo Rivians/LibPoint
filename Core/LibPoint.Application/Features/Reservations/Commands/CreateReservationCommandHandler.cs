@@ -15,6 +15,10 @@ namespace LibPoint.Application.Features.Reservations.Commands
 
         public async Task<ResponseModel<Guid>> Handle(CreateReservationCommandRequest request, CancellationToken cancellationToken)
         {
+            // yollanan session'un güncel session ile eşleşip eşleşmediği kontrol edilmeli.
+
+            // yollanan duration 1-3 saat aralığında olup olmadığı kontrol edilmeli.
+
             var sessionEndTime = request.StartTime.AddMinutes(request.Duration);
 
             var reservation = new Reservation
@@ -27,6 +31,7 @@ namespace LibPoint.Application.Features.Reservations.Commands
                 Session = request.Session,
                 CheckIn = false,
                 EndedBySession = false,
+                IsActive = true
             };
 
             var addResult = await _repository.AddAsync(reservation);
