@@ -1,13 +1,12 @@
-﻿using LibPoint.Domain.Entities.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibPoint.Domain.Entities
+namespace LibPoint.Application.Features.Books.Results
 {
-    public class Book : BaseEntity
+    public class GetBookByIdQueryResult
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -15,12 +14,5 @@ namespace LibPoint.Domain.Entities
         public bool IsAvailable { get; set; } = true;
         public string? Publisher { get; set; }
         public int? PublishedYear { get; set; }
-
-
-        public Guid AuthorId { get; set; }
-        public Author Author { get; set; }
-        public ICollection<Category> Categories { get; set; }
-        public ICollection<Borrowing> Borrowings { get; set; }
-        public ICollection<Review> Reviews { get; set; }
     }
 }
