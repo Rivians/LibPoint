@@ -1,8 +1,6 @@
 ﻿using LibPoint.Application.Abstractions;
 using LibPoint.Application.Features.Books.Queries;
 using LibPoint.Application.Features.Books.Results;
-using LibPoint.Application.Features.Review.Queries;
-using LibPoint.Application.Features.Review.Results;
 using LibPoint.Domain.Entities;
 using LibPoint.Domain.Models.Books;
 using LibPoint.Domain.Models.Responses;
