@@ -18,10 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Author\" />
-    <Folder Include="Features\Reservations\Queries\" />
-    <Folder Include="Features\Seats\Commands\" />
-    <Folder Include="Features\User\Queries\" />
+	  <Folder Include="Features\User\Queries\" />
   </ItemGroup>
 
 </Project>
