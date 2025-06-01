@@ -30,6 +30,8 @@ namespace LibPoint.Infrastructure.Services.Background
             {
                 try
                 {
+                    _logger.LogInformation($"rezevasyon background servisi başlatıldı. - {DateTime.UtcNow}");
+
                     using var scope = _serviceProvider.CreateScope();
 
                     var reservationRepo = scope.ServiceProvider.GetRequiredService<IRepository<Reservation>>();
@@ -37,25 +39,29 @@ namespace LibPoint.Infrastructure.Services.Background
 
                     var now = DateTime.UtcNow;
 
-                    var activeReservations = await reservationRepo.GetAllAsync(r => r.IsActive, false, r => r.Seat);
+                    var activeReservations = await reservationRepo.GetAllAsync(r => r.IsActive, true, r => r.Seat);
 
                     foreach (var reservation in activeReservations)
                     {
                         var endTime = reservation.StartTime.AddMinutes(reservation.Duration);
-                        if(now > endTime)
+                        if (now > endTime && !reservation.EndedByUser)
                         {
+                            _logger.LogInformation($"döngü içerisine girildi - {DateTime.UtcNow}");
+
                             reservation.IsActive = false;
                             reservation.EndedBySession = true;
-                            reservationRepo.SaveChangesAsync();
+                            await reservationRepo.SaveChangesAsync();
+
+                            _logger.LogInformation($"savechanges cağırıldı - {DateTime.UtcNow}");
 
                             var setSeatFreeCommand = new SetSeatFreeCommandRequest(reservation.SeatId);
-                            var setSeatFreeCommandResult = await mediator.Send(setSeatFreeCommand,stoppingToken);
+                            var setSeatFreeCommandResult = await mediator.Send(setSeatFreeCommand, stoppingToken);
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    throw;
+                    _logger.LogError(ex, "ReservationBackgroundService failed.");
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(30));

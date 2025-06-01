@@ -18,6 +18,7 @@ namespace LibPoint.Domain.Entities
         public bool IsActive { get; set; } = false;
         public bool CheckIn { get; set; } = false;
         public bool EndedBySession { get; set; } = false;
+        public bool EndedByUser { get; set; } = false;
 
         public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }

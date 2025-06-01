@@ -9,7 +9,7 @@ namespace LibPoint.Application.Mappers
         public SeatMap()
         {
             CreateMap<Seat, SeatModel>()
-                .ForMember(dest => dest.Reservations, opt => opt.MapFrom(src => src.Reservations))
+                //.ForMember(dest => dest.Reservations, opt => opt.MapFrom(src => src.Reservations))
                 .ReverseMap();
         }
     }

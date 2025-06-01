@@ -25,7 +25,7 @@ namespace LibPoint.Application.Features.Reservations.Queries
 
         public async Task<ResponseModel<ReservationModel>> Handle(GetReservationByIdCommandRequest request, CancellationToken cancellationToken)
         {
-            var reservation = await _repository.GetAsync(s => s.Id == request.Id, false, s => s.AppUser, s => s.Seat);
+            var reservation = await _repository.GetAsync(r => r.Id == request.Id);
 
             if (reservation is null)
                 return new ResponseModel<ReservationModel>("Reservation is null", 404);

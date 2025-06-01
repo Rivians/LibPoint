@@ -3,11 +3,15 @@ using LibPoint.Application.Features.Reservations.Queries;
 using LibPoint.Domain.Entities.Enums;
 using LibPoint.Domain.Models.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LibPoint.API.Controllers
 {
+    //(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationController : ControllerBase
@@ -88,6 +92,31 @@ namespace LibPoint.API.Controllers
                 return Ok(response);
             else
                 return BadRequest(response);
+        }
+
+        [HttpPost("end-reservation-early")]
+        public async Task<IActionResult> EndReservationEary([FromBody] EndReservationEarlyCommandRequest request)
+        {
+            if (request is null)
+                return BadRequest("Request is null");
+
+            var result = await _mediator.Send(request);
+
+            if (result.Success)
+                return Ok(result);
+            else
+                return BadRequest(result);
+        }
+
+        [Authorize]
+        [HttpGet("get-reservations-by-user")]
+        public async Task<IActionResult> GetReservationsByUser()
+        {
+            var userIdString = User.FindFirstValue("Id"); 
+
+            var result = await _mediator.Send(new GetReservationsByUserQueryRequest(Guid.Parse(userIdString)));
+
+            return result.Success ? Ok(result) : BadRequest(result);              
         }
     }
 }

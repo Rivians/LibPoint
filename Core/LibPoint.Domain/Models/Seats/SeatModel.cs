@@ -16,6 +16,6 @@ namespace LibPoint.Domain.Models.Seats
         public Guid? CurrentAppUserId { get; set; }  
         public Guid? CurrentReservationId { get; set; }
 
-        public ICollection<ReservationModel> Reservations { get; set; }
+        //public ICollection<ReservationModel> Reservations { get; set; }
     }
 }

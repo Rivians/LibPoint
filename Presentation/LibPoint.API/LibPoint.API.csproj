@@ -7,6 +7,8 @@
     <UserSecretsId>5e5ccf51-7ef4-46ea-b8a2-d008d6a58186</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>bin\Debug\net8.0\LibPoint.API.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

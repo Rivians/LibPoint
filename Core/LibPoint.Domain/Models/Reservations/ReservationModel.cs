@@ -18,11 +18,13 @@ namespace LibPoint.Domain.Models.Reservations
         public DateTime EndTime { get; set; }
         public Session Session { get; set; }
         public int Duration { get; set; }           // dakika veya saat olucak belirlemedik. update: dakika türünden olucak.
+        public bool IsActive { get; set; }
         public bool CheckIn { get; set; } = false;
         public bool? EndedBySession { get; set; } = false;
+        public bool? EndedByUser { get; set; } = false;
 
         public Guid AppUserId { get; set; }
-        public UserModel AppUser { get; set; }
+        //public UserModel AppUser { get; set; }
         public Guid SeatId { get; set; }
         public SeatModel Seat { get; set; }
     }
