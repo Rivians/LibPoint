@@ -10,12 +10,9 @@ namespace LibPoint.Application.Features.Authors.Queries;
 public class GetAuthorByIdQueryHandler:IRequestHandler<GetAuthorByIdQueryRequest, ResponseModel<AuthorModel>>
 {
     private readonly IRepository<Author> _repository;
-    private readonly IMapper _mapper;
-
-    public GetAuthorByIdQueryHandler(IRepository<Author> repository, IMapper mapper)
+    public GetAuthorByIdQueryHandler(IRepository<Author> repository)
     {
         _repository = repository;
-        _mapper = mapper;
     }
 
 
@@ -24,8 +21,17 @@ public class GetAuthorByIdQueryHandler:IRequestHandler<GetAuthorByIdQueryRequest
         var author = await _repository.GetByIdAsync(request.Id);
         if (author == null)
          return new ResponseModel<AuthorModel>("Author not found", 404 );
+
+        var authorModel = new AuthorModel
+        {
+            Id = author.Id,
+            Name = author.Name,
+            Surname = author.Surname,
+            Bio = author.Bio,
+            DateOfBirth = author.DateOfBirth,
+            DateOfDeath = author.DateOfDeath,
+        };
         
-        var mappedAuthor = _mapper.Map<AuthorModel>(author);
-        return new ResponseModel<AuthorModel>(mappedAuthor, 200);
+        return new ResponseModel<AuthorModel>(authorModel,  200);
     }
 }

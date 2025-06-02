@@ -17,11 +17,10 @@ public class RemoveAuthorCommandHandler:IRequestHandler<RemoveAuthorCommandReque
     {
         var author =await _repository.GetByIdAsync(request.Id);
 
-        if (author==null || author.IsDeleted)
+        if (author==null)
             return new ResponseModel<Guid>("Author not found or already removed", 404);
         
-        author.IsDeleted = true;
-        _repository.Update(author);
+        var deleteauthor=_repository.Delete(author);
         await _repository.SaveChangesAsync();
         return new ResponseModel<Guid>(author.Id);
     }
