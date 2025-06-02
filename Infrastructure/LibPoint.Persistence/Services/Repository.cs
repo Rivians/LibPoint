@@ -97,7 +97,7 @@ namespace LibPoint.Persistence.Services
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id, bool tracking = false)
+        public async Task<T> GetByIdAsync(Guid id, bool tracking = false)
         {
             var query = Table.AsQueryable();
 

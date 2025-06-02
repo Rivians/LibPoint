@@ -13,7 +13,7 @@ namespace LibPoint.Application.Abstractions
         DbSet<T> Table { get; }
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, bool tracking = false, params Expression<Func<T, object>>[] includeEntity);
         Task<T> GetAsync(Expression<Func<T, bool>> expression = null, bool tracking = false, params Expression<Func<T, object>>[] includeEntity);
-        Task<T> GetByIdAsync(int id, bool tracking = false);
+        Task<T> GetByIdAsync(Guid id, bool tracking = false);
         Task<bool> AddAsync(T entity);
         Task AddRangeAsync(List<T> entites);
         bool Update(T entity);
