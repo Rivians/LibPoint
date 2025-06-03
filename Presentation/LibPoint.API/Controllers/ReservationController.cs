@@ -118,5 +118,23 @@ namespace LibPoint.API.Controllers
 
             return result.Success ? Ok(result) : BadRequest(result);              
         }
+
+        [Authorize]
+        [HttpGet("generate-qr")]
+        public async Task<IActionResult> GenerateQr(Guid reservationId)
+        {
+            var result = await _mediator.Send(new CreateReservationQrCodeQueryRequest(reservationId));
+
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        [Authorize]
+        [HttpPost("check-in-reservation")]
+        public async Task<IActionResult> CheckInReservation(Guid reservationId)
+        {
+            var result = await _mediator.Send(new CheckInReservationCommandRequest(reservationId));
+
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
     }
 }

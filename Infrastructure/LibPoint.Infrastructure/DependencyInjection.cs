@@ -37,11 +37,13 @@ namespace LibPoint.Infrastructure
                     };
                 });
 
-            services.AddAuthorization();
+            services.AddAuthorization();            
 
             // -- Services --
 
             services.AddScoped<ITokenService, TokenService>();
+
+            services.AddScoped<IGenerateQrService, GenerateQrService>();
 
             services.AddHostedService<ReservationBackgroundService>();
 

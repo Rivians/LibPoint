@@ -17,6 +17,7 @@ namespace LibPoint.Domain.Entities
         public int Duration { get; set; }           // dakika veya saat olucak belirlemedik. dakika olucak.
         public bool IsActive { get; set; } = false;
         public bool CheckIn { get; set; } = false;
+        public DateTime? CheckInTime { get; set; }
         public bool EndedBySession { get; set; } = false;
         public bool EndedByUser { get; set; } = false;
 

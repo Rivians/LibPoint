@@ -20,6 +20,7 @@ namespace LibPoint.Domain.Models.Reservations
         public int Duration { get; set; }           // dakika veya saat olucak belirlemedik. update: dakika türünden olucak.
         public bool IsActive { get; set; }
         public bool CheckIn { get; set; } = false;
+        public DateTime? CheckInTime { get; set; }
         public bool? EndedBySession { get; set; } = false;
         public bool? EndedByUser { get; set; } = false;
 
