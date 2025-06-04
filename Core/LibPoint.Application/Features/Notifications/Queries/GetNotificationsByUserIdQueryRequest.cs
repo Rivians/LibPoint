@@ -11,10 +11,10 @@ namespace LibPoint.Application.Features.Notifications.Queries
 {
     public class GetNotificationsByUserIdQueryRequest : IRequest<ResponseModel<List<NotificationModel>>>
     {
-        public Guid Id { get; set; }
-        public GetNotificationsByUserIdQueryRequest(Guid ıd)
+        public Guid AppUserId { get; set; }
+        public GetNotificationsByUserIdQueryRequest(Guid appUserId)
         {
-            Id = ıd;
+            AppUserId = appUserId;
         }
     }
 }
