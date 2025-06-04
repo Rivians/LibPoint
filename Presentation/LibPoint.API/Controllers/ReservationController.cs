@@ -74,12 +74,12 @@ namespace LibPoint.API.Controllers
         }
 
         /// <summary>
-        /// parametre olarak 0 (sabah seansı) , 1 (öğle seansı) veya 2 (akşam seansı) yollaman lazım.
+        /// parametre olarak 0 (sabah seansı) , 1 (öğle seansı) veya 2 (akşam seansı) yollaman lazım. (admin paneli için)
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
         [HttpGet("get-active-reservations-by-sessions")]
-        public async Task<IActionResult> GetActiveReservationsBySessions(int session)       // admin paneli için
+        public async Task<IActionResult> GetActiveReservationsBySessions(int session)
         {
             int[] sessions = [0, 1, 2];
 
@@ -108,7 +108,7 @@ namespace LibPoint.API.Controllers
                 return BadRequest(result);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("get-reservations-by-user")]
         public async Task<IActionResult> GetReservationsByUser()
         {
@@ -128,9 +128,8 @@ namespace LibPoint.API.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [Authorize]
-        [HttpPost("check-in-reservation")]
-        public async Task<IActionResult> CheckInReservation(Guid reservationId)
+        [HttpGet("check-in-reservation")]
+        public async Task<IActionResult> CheckInReservation([FromQuery] Guid reservationId)
         {
             var result = await _mediator.Send(new CheckInReservationCommandRequest(reservationId));
 
