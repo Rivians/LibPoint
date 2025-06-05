@@ -14,6 +14,6 @@ namespace LibPoint.Application.Features.Notifications.Commands
         public Guid AppUserId { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
-        public NotificationType Type { get; set; }
+        public int Type { get; set; } // 0 - 1 - 2
     }
 }

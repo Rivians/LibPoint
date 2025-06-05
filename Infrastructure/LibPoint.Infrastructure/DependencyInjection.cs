@@ -41,11 +41,13 @@ namespace LibPoint.Infrastructure
 
             // -- Services --
 
+            services.AddHostedService<ReservationBackgroundService>();
+
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddScoped<IGenerateQrService, GenerateQrService>();
 
-            services.AddHostedService<ReservationBackgroundService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

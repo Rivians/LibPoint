@@ -30,6 +30,11 @@ namespace LibPoint.API.Controllers
         [HttpPost("create-notification")]
         public async Task<IActionResult> CreateNotification([FromBody] CreateNofiticationCommandRequest command)
         {
+            int[] types = [0, 1, 2];
+
+            if (!types.Contains(command.Type))
+                return BadRequest("Just send the value of notification tpyes 0, 1 or 2");
+
             var result = await _mediator.Send(command);
 
             if (result.Success)

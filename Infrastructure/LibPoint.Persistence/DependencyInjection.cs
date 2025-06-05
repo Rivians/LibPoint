@@ -48,11 +48,13 @@ namespace LibPoint.Persistence
    
 
             // -- Services --
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
             services.AddScoped<IAuthService, AuthService>();
 
-
             // -- Repositories --
+
             services.AddScoped<ISeatRepository, SeatRepository>();
 
             return services;
