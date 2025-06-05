@@ -1,15 +1,12 @@
 ﻿using LibPoint.Application.Abstractions;
+using LibPoint.Application.Features.Notifications.Commands;
 using LibPoint.Application.Features.Seats.Commands;
 using LibPoint.Domain.Entities;
+using LibPoint.Domain.Entities.Enums;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibPoint.Infrastructure.Services.Background
 {
@@ -46,16 +43,39 @@ namespace LibPoint.Infrastructure.Services.Background
                         var endTime = reservation.StartTime.AddMinutes(reservation.Duration);
                         if (now > endTime && !reservation.EndedByUser)
                         {
-                            _logger.LogInformation($"döngü içerisine girildi - {DateTime.UtcNow}");
+                            //_logger.LogInformation($"döngü içerisine girildi - {DateTime.UtcNow}");
 
                             reservation.IsActive = false;
                             reservation.EndedBySession = true;
                             await reservationRepo.SaveChangesAsync();
 
-                            _logger.LogInformation($"savechanges cağırıldı - {DateTime.UtcNow}");
+                            //_logger.LogInformation($"savechanges cağırıldı - {DateTime.UtcNow}");
 
                             var setSeatFreeCommand = new SetSeatFreeCommandRequest(reservation.SeatId);
                             var setSeatFreeCommandResult = await mediator.Send(setSeatFreeCommand, stoppingToken);
+                        }
+
+                        var checkInEndTime = reservation.StartTime.AddMinutes(2);
+                        if(now > checkInEndTime && !reservation.CheckIn && !reservation.EndedByUser)
+                        {
+                            reservation.IsActive = false;
+                            reservation.EndedBySession = true;
+                            await reservationRepo.SaveChangesAsync();
+
+                            var setSeatFreeCommand2 = new SetSeatFreeCommandRequest(reservation.SeatId);
+                            var setSeatFreeCommandResult2 = await mediator.Send(setSeatFreeCommand2, stoppingToken);
+
+                            var createNotificationCommand = new CreateNofiticationCommandRequest
+                            {
+                                AppUserId = reservation.AppUserId,
+                                Title = "Rezevasyon İptali",
+                                Message = $"Saat {reservation.StartTime:HH:mm} tarihinde başlayan rezervasyonunuz için belirtilen check-in süresi dolduğu için rezervasyon iptal edilmiştir.",
+                                Type = (int)NotificationType.EmailAndSystem
+                            };
+
+                            await mediator.Send(createNotificationCommand, stoppingToken);
+                            _logger.LogInformation($"Check-in süresi dolduğu için rezervasyon iptal edildi ve bildirim gönderildi.");
+                            _logger.LogInformation($"AppUserId ==> {reservation.AppUserId} ----- RezervasyonId ==> {reservation.Id}");
                         }
                     }
                 }
