@@ -1,6 +1,7 @@
 ﻿using LibPoint.Application.Abstractions;
 using LibPoint.Application.Features.Notifications.Commands;
 using LibPoint.Application.Features.User.Commands;
+using LibPoint.Application.Features.User.Queries;
 using LibPoint.Domain.Models.Responses;
 using LibPoint.Domain.Models.User;
 using MediatR;
@@ -21,7 +22,7 @@ namespace LibPoint.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommandRequest loginCommandRequest)
         {
             ResponseModel<UserLoginModel> responseModel = await _mediator.Send(loginCommandRequest);
@@ -32,12 +33,32 @@ namespace LibPoint.API.Controllers
             return Ok(responseModel);
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterCommandRequest registerCommandRequest)
         {
             ResponseModel<UserRegisterModel> responseModel = await _mediator.Send(registerCommandRequest);
 
             if (responseModel.Success is false)
+                return BadRequest(responseModel);
+
+            return Ok(responseModel);
+        }
+
+        [HttpGet("get-user-list")]
+        public async Task<IActionResult> GetUserList()
+        {
+            var command = new GetUserListQueryRequest();
+            var result = await _mediator.Send(command);
+
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpDelete("delete-user-by-id")]        
+        public async Task<IActionResult> DeleteUserById([FromHeader] Guid userId)
+        {
+            ResponseModel<bool> responseModel = await _mediator.Send(new DeleteUserByIdCommandRequest(userId));
+
+            if (!responseModel.Success)
                 return BadRequest(responseModel);
 
             return Ok(responseModel);

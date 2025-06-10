@@ -18,8 +18,4 @@
     <ProjectReference Include="..\LibPoint.Domain\LibPoint.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\User\Queries\" />
-  </ItemGroup>
-
 </Project>
