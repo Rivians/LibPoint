@@ -38,8 +38,9 @@ namespace LibPoint.Application.Features.Books.Handlers
                     IsAvailable = Book.IsAvailable,
                     PublishedYear = Book.PublishedYear,
                     Publisher = Book.Publisher,
-                    Categories = Book.Categories
-
+                    Categories = Book.Categories,
+                    AuthorName = Book.AuthorName,
+                    ImageUrl = Book.ImageUrl
                 }).ToList();
                 return new ResponseModel<List<BookModel>>(bookmodel);
                 

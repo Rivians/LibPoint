@@ -26,7 +26,7 @@ namespace LibPoint.Application.Features.Books.Handlers
 
         public async Task<ResponseModel<BookModel>> Handle(GetBookByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var values = await _repository.GetAsync(b => b.Id == request.Id, false, b => b.Author, b => b.Categories);
+            var values = await _repository.GetAsync(b => b.Id == request.Id, false, b => b.Categories);
             if (values == null)
             {
                 return new ResponseModel<BookModel>("hata", 400);
@@ -43,8 +43,8 @@ namespace LibPoint.Application.Features.Books.Handlers
                     IsAvailable = values.IsAvailable,
                     PublishedYear = values.PublishedYear,
                     Publisher = values.Publisher,
-
-
+                    AuthorName = values.AuthorName,
+                    ImageUrl = values.ImageUrl
                 };
 
                 return new ResponseModel<BookModel>(bookmodel);

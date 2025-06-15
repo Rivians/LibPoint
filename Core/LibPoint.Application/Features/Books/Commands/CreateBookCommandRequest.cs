@@ -15,6 +15,7 @@ namespace LibPoint.Application.Features.Books.Commands
         public bool IsAvailable { get; set; } = true;
         public string? Publisher { get; set; }
         public int? PublishedYear { get; set; }
-        public Guid AuthorId { get; set; }
+        public string AuthorName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using LibPoint.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LibPoint.Persistence.Migrations
 {
     [DbContext(typeof(LibPointDbContext))]
-    partial class LibPointDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250615180340_removed-author-relations-with-book")]
+    partial class removedauthorrelationswithbook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +83,7 @@ namespace LibPoint.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AuthorId")
+                    b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("AuthorName")
@@ -594,9 +597,13 @@ namespace LibPoint.Persistence.Migrations
 
             modelBuilder.Entity("LibPoint.Domain.Entities.Book", b =>
                 {
-                    b.HasOne("LibPoint.Domain.Entities.Author", null)
+                    b.HasOne("LibPoint.Domain.Entities.Author", "Author")
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("LibPoint.Domain.Entities.Borrowing", b =>

@@ -14,10 +14,12 @@ namespace LibPoint.Domain.Entities
         public bool IsAvailable { get; set; } = true;
         public string? Publisher { get; set; }
         public int? PublishedYear { get; set; }
+        public string AuthorName { get; set; }
+        public string ImageUrl { get; set; }
 
 
-        public Guid AuthorId { get; set; }
-        public Author Author { get; set; }
+        //public Guid AuthorId { get; set; }
+        //public Author Author { get; set; }
         public ICollection<Category> Categories { get; set; }
         public ICollection<Borrowing> Borrowings { get; set; }
         public ICollection<Review> Reviews { get; set; }

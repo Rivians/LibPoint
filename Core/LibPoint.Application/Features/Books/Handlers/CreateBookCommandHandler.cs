@@ -30,8 +30,8 @@ namespace LibPoint.Application.Features.Books.Handlers
                 Name = request.Name,
                 PublishedYear = request.PublishedYear,
                 Publisher = request.Publisher,
-                AuthorId = request.AuthorId,
-
+                AuthorName = request.AuthorName,
+                ImageUrl = request.ImageUrl
             };
 
             var result = await _repository.AddAsync(newBook);

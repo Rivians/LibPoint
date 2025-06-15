@@ -39,6 +39,8 @@ namespace LibPoint.Application.Features.Books.Handlers
                 updatingBook.IsAvailable = request.IsAvailable;
                 updatingBook.Publisher = request.Publisher;
                 updatingBook.PublishedYear = request.PublishedYear;
+                updatingBook.AuthorName = request.AuthorName;
+                updatingBook.ImageUrl = request.ImageUrl;
 
                 var updateResult = _repository.Update(updatingBook);
                 if (!updateResult)
