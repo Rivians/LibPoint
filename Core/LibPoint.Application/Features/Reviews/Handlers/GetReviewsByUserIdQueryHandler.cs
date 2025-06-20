@@ -18,7 +18,7 @@ public class GetReviewsByUserIdQueryHandler:IRequestHandler<GetReviewsByUserIdQu
     
     public async Task<ResponseModel<List<ReviewModel>>> Handle(GetReviewsByUserIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var reviews = await _repository.GetAllAsync(r => r.AppuUserId == request.UserId, false);
+        var reviews = await _repository.GetAllAsync(r => r.AppUserId == request.UserId, true, r => r.AppUser);
 
         if (reviews == null|| !reviews.Any())
             return new ResponseModel<List<ReviewModel>>("No reviews found for this user.", 404);
@@ -28,8 +28,10 @@ public class GetReviewsByUserIdQueryHandler:IRequestHandler<GetReviewsByUserIdQu
             Id = review.Id,
             Rating = review.Rating,
             Comment = review.Comment,
-            AppuUserId = review.AppuUserId,
-            BookId = review.BookId
+            AppuUserId = review.AppUserId,
+            BookId = review.BookId,
+            FullName = review.FullName,
+            CreatedTime = review.CreatedTime            
         }).ToList();
 
         return new ResponseModel<List<ReviewModel>>(reviewModels, 200);

@@ -1,6 +1,6 @@
 ﻿using LibPoint.Application.Abstractions;
 using LibPoint.Application.Features.Books.Commands;
-
+using LibPoint.Application.Features.Reservations.Queries;
 using LibPoint.Domain.Entities;
 using LibPoint.Domain.Models.Responses;
 using MediatR;
@@ -31,6 +31,8 @@ namespace LibPoint.Application.Features.Books.Handlers
                 PublishedYear = request.PublishedYear,
                 Publisher = request.Publisher,
                 AuthorName = request.AuthorName,
+                Description = request.Description,
+                Genre = request.Genre,
                 ImageUrl = request.ImageUrl
             };
 

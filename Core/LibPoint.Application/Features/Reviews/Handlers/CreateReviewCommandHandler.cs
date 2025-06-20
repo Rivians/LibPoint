@@ -21,7 +21,7 @@ public class CreateReviewCommandHandler: IRequestHandler<CreateReviewCommandRequ
             Id = Guid.NewGuid(),
             Rating = request.Rating,
             Comment = request.Comment,
-            AppuUserId = request.AppuUserId,
+            AppUserId = request.AppuUserId,
             BookId = request.BookId,
         };
 

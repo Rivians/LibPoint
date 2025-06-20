@@ -14,5 +14,10 @@ namespace LibPoint.Application.Features.Books.Results
         public bool IsAvailable { get; set; } = true;
         public string? Publisher { get; set; }
         public int? PublishedYear { get; set; }
+        // update ---
+        public string Description { get; set; }
+        public string Genre { get; set; }
+        // ---
+        public string ImageUrl { get; set; }
     }
 }

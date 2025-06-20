@@ -28,8 +28,10 @@ public class GetReviewsByBookIdQueryHandler:IRequestHandler<GetReviewsByBookIdQu
             Id = r.Id,
             Rating = r.Rating,
             Comment = r.Comment,
-            AppuUserId = r.AppuUserId,
-            BookId = r.BookId
+            AppuUserId = r.AppUserId,
+            BookId = r.BookId,
+            FullName = r.FullName,
+            CreatedTime = r.CreatedTime
         }).ToList();
 
         return new ResponseModel<List<ReviewModel>>(reviewModels, 200);

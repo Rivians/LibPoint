@@ -10,9 +10,9 @@ namespace LibPoint.Domain.Entities
 {
     public class Borrowing : BaseEntity
     {
-        public DateTime BorrowDate { get; set; }
-        public DateTime DueDate { get; set; }
-        public bool IsReturned { get; set; } = false;
+        //public DateTime BorrowDate { get; set; }
+        //public DateTime DueDate { get; set; }
+        //public bool IsReturned { get; set; } = false;
 
         public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }

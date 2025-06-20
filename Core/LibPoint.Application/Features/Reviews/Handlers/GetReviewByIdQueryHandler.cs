@@ -17,7 +17,9 @@ public class GetReviewByIdQueryHandler:IRequestHandler<GetReviewByIdQueryRequest
     }
     public async Task<ResponseModel<ReviewModel>> Handle(GetReviewByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var review = await _repository.GetByIdAsync(request.Id);
+        //var review = await _repository.GetByIdAsync(request.Id);
+
+        var review = await _repository.GetAsync(r => r.Id == request.Id, true, r => r.AppUser);
 
         if (review == null)
             return new ResponseModel<ReviewModel>("Review not found", 404);
@@ -26,8 +28,9 @@ public class GetReviewByIdQueryHandler:IRequestHandler<GetReviewByIdQueryRequest
         {
             Id = review.Id,
             Rating = review.Rating,
+            FullName = review.FullName,
             Comment = review.Comment,
-            AppuUserId = review.AppuUserId,
+            AppuUserId = review.AppUserId,
             BookId = review.BookId
         };
 

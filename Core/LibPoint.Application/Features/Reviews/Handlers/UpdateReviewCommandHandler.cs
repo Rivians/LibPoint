@@ -24,7 +24,7 @@ public class UpdateReviewCommandHandler:IRequestHandler<UpdateReviewCommandReque
 
         review.Rating = request.Rating;
         review.Comment = request.Comment;
-        review.AppuUserId = request.AppuUserId;
+        review.AppUserId = request.AppuUserId;
         review.BookId = request.BookId;
 
         var updateResult = _repository.Update(review);

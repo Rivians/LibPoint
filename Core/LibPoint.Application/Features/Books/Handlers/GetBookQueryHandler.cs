@@ -40,6 +40,8 @@ namespace LibPoint.Application.Features.Books.Handlers
                     Publisher = Book.Publisher,
                     Categories = Book.Categories,
                     AuthorName = Book.AuthorName,
+                    Description = Book.Description,
+                    Genre = Book.Genre,
                     ImageUrl = Book.ImageUrl
                 }).ToList();
                 return new ResponseModel<List<BookModel>>(bookmodel);

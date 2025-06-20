@@ -12,9 +12,10 @@ namespace LibPoint.Domain.Entities
     {
         public int Rating { get; set; }   // 1 - 10 arasında olmalı
         public string Comment { get; set; }
+        public string FullName => $"{AppUser?.Name} {AppUser?.Surname}";
 
 
-        public Guid AppuUserId { get; set; }
+        public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         public Guid BookId { get; set; }
         public Book Book { get; set; }

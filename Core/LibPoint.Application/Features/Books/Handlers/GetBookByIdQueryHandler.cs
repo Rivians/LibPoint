@@ -44,6 +44,8 @@ namespace LibPoint.Application.Features.Books.Handlers
                     PublishedYear = values.PublishedYear,
                     Publisher = values.Publisher,
                     AuthorName = values.AuthorName,
+                    Description = values.Description,
+                    Genre = values.Genre,
                     ImageUrl = values.ImageUrl
                 };
 

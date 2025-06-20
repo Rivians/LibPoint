@@ -17,6 +17,8 @@ namespace LibPoint.Application.Features.Books.Commands
         public string? Publisher { get; set; }
         public int? PublishedYear { get; set; }
         public string AuthorName { get; set; }
+        public string Genre { get; set; }
+        public string Description { get; set; }
         public string ImageUrl { get; set; }
     }
 }

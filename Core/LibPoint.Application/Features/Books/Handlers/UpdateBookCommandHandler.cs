@@ -40,6 +40,8 @@ namespace LibPoint.Application.Features.Books.Handlers
                 updatingBook.Publisher = request.Publisher;
                 updatingBook.PublishedYear = request.PublishedYear;
                 updatingBook.AuthorName = request.AuthorName;
+                updatingBook.Description = request.Description;
+                updatingBook.Genre = request.Genre;
                 updatingBook.ImageUrl = request.ImageUrl;
 
                 var updateResult = _repository.Update(updatingBook);
