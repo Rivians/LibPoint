@@ -26,15 +26,21 @@ namespace LibPoint.Application.Features.Reservations.Commands
 
         public async Task<ResponseModel<bool>> Handle(ReserveSeatWithTransactionCommandRequest request, CancellationToken cancellationToken)
         {
-            var transactionResult = await _reservationRepository.ExecuteTransactionAsync(async () =>
+            bool transactionResult = await _reservationRepository.ExecuteTransactionAsync(async () =>
             {
+                var utcNow = DateTime.UtcNow;
+                var session = DetermineSession(utcNow);
+
+                if (session == -1)
+                    return false;
+
                 var createReservationCommand = new CreateReservationCommandRequest
                 {
                     AppUserId = request.AppUserId,
                     SeatId = request.SeatId,
-                    Session = Enum.Parse<Session>(request.Session.ToString()),
+                    Session = (Session)session,
                     Duration = request.Duration,
-                    StartTime = DateTime.UtcNow
+                    StartTime = utcNow
                 };
 
                 var reservationCreateResult = await _mediator.Send(createReservationCommand);
@@ -49,5 +55,25 @@ namespace LibPoint.Application.Features.Reservations.Commands
 
             return transactionResult ? new ResponseModel<bool>(transactionResult) : new ResponseModel<bool>("Transaction failed.", 400);
         }
+
+        private int DetermineSession(DateTime utcTime)
+        {
+            var localTime = utcTime.AddHours(3); // tr saatine denk oluyor
+
+            var time = localTime.TimeOfDay;
+
+            if (time >= TimeSpan.FromHours(8) && time < TimeSpan.FromHours(13))
+                return 0;
+            else if (time >= TimeSpan.FromHours(13) && time < TimeSpan.FromHours(18))
+                return 1;
+            else if (time >= TimeSpan.FromHours(18) && time < TimeSpan.FromHours(23))
+                return 2;
+
+            return -1;            
+        }
     }
 }
+
+//Morning,    // 08:00 - 13:00
+//Afternoon,  // 13:00 - 18:00
+//Evening     // 18:00 - 23:00

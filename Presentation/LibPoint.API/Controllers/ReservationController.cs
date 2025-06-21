@@ -36,10 +36,10 @@ namespace LibPoint.API.Controllers
         [HttpPost("reserve-seat-with-transaction")]
         public async Task<IActionResult> ReserveSeatWithTransaction([FromBody] ReserveSeatWithTransactionCommandRequest request)
         {
-            int[] sessions = [0, 1, 2];
+            //int[] sessions = [0, 1, 2];
 
-            if (!sessions.Contains(request.Session))
-                return BadRequest("Just send the value of session 0, 1 or 2");
+            //if (!sessions.Contains(request.Session))
+            //    return BadRequest("Just send the value of session 0, 1 or 2");
 
             if (request.AppUserId == Guid.Empty || request.SeatId == Guid.Empty)
                 return BadRequest(new ResponseModel<bool>("One of ID that you request is invalid"));

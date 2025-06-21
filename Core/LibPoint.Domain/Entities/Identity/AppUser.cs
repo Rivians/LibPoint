@@ -7,6 +7,7 @@ namespace LibPoint.Domain.Entities.Identity
         public string Name { get; set; }
         public string Surname { get; set; }
         public bool IsMalformed { get; set; } = false;
+        public bool IsAdmin { get; set; } = false;
 
         public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedTime { get; set; }

@@ -31,7 +31,8 @@ namespace LibPoint.Application.Features.Borrowings.Handlers
                     Id = borrowing.Id,
                     AppUserId = borrowing.AppUserId,
                     BookId = borrowing.BookId,
-                    IsActive = borrowing.IsActive
+                    IsActive = borrowing.IsActive,
+                    Code = borrowing.Code 
                 };
                 return new ResponseModel<BorrowingModel>(borrowingModel, 200);
             }
