@@ -31,9 +31,7 @@ namespace LibPoint.Application.Features.Borrowings.Handlers
                     Id = b.Id,
                     BookId = b.BookId,
                     AppUserId = b.AppUserId,
-                    BorrowDate = b.BorrowDate,
-                    DueDate = b.DueDate,
-                    IsReturned = b.IsReturned
+                    IsActive = b.IsActive
                 }).ToList();
                 return new ResponseModel<List<BorrowingModel>>(borrowingModels, 200);
             }

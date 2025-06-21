@@ -29,9 +29,6 @@ namespace LibPoint.Application.Features.Borrowings.Handlers
             }
             else
             {
-                updatingBorrowing.BorrowDate = request.BorrowDate;
-                updatingBorrowing.DueDate = request.DueDate;
-                updatingBorrowing.IsReturned = request.IsReturned;
                 updatingBorrowing.AppUserId = request.AppUserId;
                 updatingBorrowing.BookId = request.BookId;
                 var updateResult = repository.Update(updatingBorrowing);

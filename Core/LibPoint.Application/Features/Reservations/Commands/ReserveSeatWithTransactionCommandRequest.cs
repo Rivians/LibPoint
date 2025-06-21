@@ -15,5 +15,6 @@ namespace LibPoint.Application.Features.Reservations.Commands
         public Guid SeatId { get; set; }
         public int Session { get; set; }
         public int Duration { get; set; }
+        //  public DateTime burada istek atılıan tarih utc now'a atanıcak.
     }
 }

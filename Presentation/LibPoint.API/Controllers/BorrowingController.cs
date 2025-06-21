@@ -47,6 +47,14 @@ namespace LibPoint.API.Controllers
             var response = await _mediator.Send(request);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        [HttpPost("CompleteBorrowing")]
+        public async Task<IActionResult> CompleteBorrowing([FromBody] CompleteBorrowingCommandRequest request)
+        {
+            var response = await _mediator.Send(request);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
         [HttpPut("UpdateBorrowing")]
         public async Task<IActionResult> UpdateBorrowing([FromBody] UpdateBorrowingCommandRequest request)
         {

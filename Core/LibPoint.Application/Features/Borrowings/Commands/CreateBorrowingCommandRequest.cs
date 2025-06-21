@@ -12,12 +12,7 @@ namespace LibPoint.Application.Features.Borrowings.Commands
 {
     public class CreateBorrowingCommandRequest: IRequest<ResponseModel<Guid>>
     {
-        public DateTime BorrowDate { get; set; }
-        public DateTime DueDate { get; set; }
-        public bool IsReturned { get; set; } = false;
-
         public Guid AppUserId { get; set; }
-
         public Guid BookId { get; set; }
 
     }
