@@ -13,6 +13,7 @@ namespace LibPoint.Domain.Models.Seats
         public Guid Id { get; set; }
         public string SeatNumber { get; set; }
         public bool IsReserved { get; set; } = false; 
+        public bool IsMalformed { get; set; } = false; 
         public Guid? CurrentAppUserId { get; set; }  
         public Guid? CurrentReservationId { get; set; }
 

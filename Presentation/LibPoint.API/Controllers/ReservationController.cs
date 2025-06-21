@@ -108,13 +108,14 @@ namespace LibPoint.API.Controllers
                 return BadRequest(result);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("get-reservations-by-user")]
-        public async Task<IActionResult> GetReservationsByUser()
+        public async Task<IActionResult> GetReservationsByUser([FromBody] GetReservationsByUserQueryRequest request)
         {
-            var userIdString = User.FindFirstValue("Id"); 
+            if (request is null)
+                return BadRequest("Request is null");
 
-            var result = await _mediator.Send(new GetReservationsByUserQueryRequest(Guid.Parse(userIdString)));
+            var result = await _mediator.Send(new GetReservationsByUserQueryRequest(request.AppUserId));
 
             return result.Success ? Ok(result) : BadRequest(result);              
         }

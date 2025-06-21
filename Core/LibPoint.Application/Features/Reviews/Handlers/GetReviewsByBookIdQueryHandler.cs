@@ -18,7 +18,7 @@ public class GetReviewsByBookIdQueryHandler:IRequestHandler<GetReviewsByBookIdQu
     
     public async Task<ResponseModel<List<ReviewModel>>> Handle(GetReviewsByBookIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var reviews = await _repository.GetAllAsync(r => r.BookId == request.BookId, false);
+        var reviews = await _repository.GetAllAsync(r => r.BookId == request.BookId, false, r => r.AppUser);
 
         if (reviews == null|| !reviews.Any())
             return new ResponseModel<List<ReviewModel>>("No reviews found for this book.", 404);

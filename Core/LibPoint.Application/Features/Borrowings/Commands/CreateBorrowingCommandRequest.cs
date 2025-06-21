@@ -14,6 +14,5 @@ namespace LibPoint.Application.Features.Borrowings.Commands
     {
         public Guid AppUserId { get; set; }
         public Guid BookId { get; set; }
-
     }
 }

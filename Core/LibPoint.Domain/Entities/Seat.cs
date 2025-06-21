@@ -11,6 +11,7 @@ namespace LibPoint.Domain.Entities
     {
         public string SeatNumber { get; set; }
         public bool IsReserved { get; set; } = false;
+        public bool IsMalformed { get; set; } = false;
         public Guid? CurrentAppUserId { get; set; }  // eğerki sandalye dolu ise 
         public Guid? CurrentReservationId { get; set; }  
 

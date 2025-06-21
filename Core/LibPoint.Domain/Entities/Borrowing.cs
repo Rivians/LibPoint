@@ -14,6 +14,7 @@ namespace LibPoint.Domain.Entities
         public Guid AppUserId { get; set; }
         public Guid BookId { get; set; }
         public bool IsActive { get; set; } = false;
+        public string Code { get; set; }
 
         public AppUser AppUser { get; set; }
         public Book Book { get; set; }

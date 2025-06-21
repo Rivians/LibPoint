@@ -11,12 +11,15 @@ namespace LibPoint.Application.Features.Borrowings.Commands
     public class CompleteBorrowingCommandRequest : IRequest<ResponseModel<bool>>
     {
         public Guid AppUserId { get; set; }
+        public Guid AdminId { get; set; }
         public Guid BookId { get; set; }
 
-        public CompleteBorrowingCommandRequest(Guid appUserId, Guid bookId)
+        public CompleteBorrowingCommandRequest(Guid appUserId, Guid adminId, Guid bookId)
         {
             AppUserId = appUserId;
+            AdminId = adminId;
             BookId = bookId;
         }
+
     }
 }

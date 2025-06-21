@@ -12,7 +12,8 @@ namespace LibPoint.Domain.Models.Borrowings
     {
         public Guid Id { get; set; }
         public Guid AppUserId { get; set; }
-        public bool IsActive { get; set; } 
+        public bool IsActive { get; set; }
+        public string Code { get; set; }
 
         //public AppUser AppUser { get; set; }
         public Guid BookId { get; set; }

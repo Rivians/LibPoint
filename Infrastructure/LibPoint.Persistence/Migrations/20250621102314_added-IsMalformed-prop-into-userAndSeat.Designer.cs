@@ -3,6 +3,7 @@ using System;
 using LibPoint.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LibPoint.Persistence.Migrations
 {
     [DbContext(typeof(LibPointDbContext))]
-    partial class LibPointDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250621102314_added-IsMalformed-prop-into-userAndSeat")]
+    partial class addedIsMalformedpropintouserAndSeat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,10 +145,6 @@ namespace LibPoint.Persistence.Migrations
 
                     b.Property<Guid>("BookId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("timestamp with time zone");

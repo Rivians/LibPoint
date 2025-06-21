@@ -28,13 +28,16 @@ namespace LibPoint.Application.Features.Borrowings.Handlers
             if (book is null)
                 return new ResponseModel<Guid>("Borrowing operation failed, because book is not found", 404);
 
+            var code = GenerateCode();
+
             var borrowing = new Borrowing
             {
                 Id = Guid.NewGuid(),
                 AppUserId = request.AppUserId,
                 BookId = request.BookId,
-                IsActive = true
-            };            
+                IsActive = true,
+                Code = code
+            };
 
             var createResult = await _repository.AddAsync(borrowing);
             if (!createResult)
@@ -52,7 +55,14 @@ namespace LibPoint.Application.Features.Borrowings.Handlers
             else
             {
                 return new ResponseModel<Guid>("Borrowing saving entity failed.", 400);
-            }            
-        }            
+            }
+        }
+
+        private string GenerateCode()
+        {
+            var random = new Random();
+            return random.Next(100000, 999999).ToString(); 
+        }
+
     }
 }
