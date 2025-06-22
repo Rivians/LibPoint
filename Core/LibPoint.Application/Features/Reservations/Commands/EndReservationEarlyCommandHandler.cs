@@ -20,7 +20,8 @@ namespace LibPoint.Application.Features.Reservations.Commands
 
         public async Task<ResponseModel<bool>> Handle(EndReservationEarlyCommandRequest request, CancellationToken cancellationToken)
         {
-            var reservation = await _repository.GetByIdAsync(request.ReservationId);
+            //var reservation = await _repository.GetByIdAsync(request.ReservationId);
+            var reservation = await _repository.GetAsync(r => r.Id == request.ReservationId, true, r => r.Seat);
 
             if (reservation == null || reservation.IsActive == false)
                 return new ResponseModel<bool>("Reservation can not found", 404);
@@ -29,6 +30,9 @@ namespace LibPoint.Application.Features.Reservations.Commands
                 return new ResponseModel<bool>("This reservation does not belong to you.", 403);  // 403 yasak erişim. 
 
             reservation.IsActive = false;
+            reservation.Seat.IsReserved = false;   // seat'in IsReserved değerini false yapcaz.
+            reservation.Seat.CurrentReservationId = null;
+            reservation.Seat.CurrentAppUserId = null;
 
             reservation.EndedByUser = true;
 

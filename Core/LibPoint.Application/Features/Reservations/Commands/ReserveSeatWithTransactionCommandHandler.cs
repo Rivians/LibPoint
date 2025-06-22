@@ -29,6 +29,8 @@ namespace LibPoint.Application.Features.Reservations.Commands
             bool transactionResult = await _reservationRepository.ExecuteTransactionAsync(async () =>
             {
                 var utcNow = DateTime.UtcNow;
+                //var realTime = utcNow.AddHours(3); // tr saatine denk oluyor
+
                 var session = DetermineSession(utcNow);
 
                 if (session == -1)

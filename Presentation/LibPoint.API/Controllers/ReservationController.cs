@@ -73,26 +73,37 @@ namespace LibPoint.API.Controllers
                 return BadRequest(response);
         }
 
-        /// <summary>
-        /// parametre olarak 0 (sabah seansı) , 1 (öğle seansı) veya 2 (akşam seansı) yollaman lazım. (admin paneli için)
-        /// </summary>
-        /// <param name="session"></param>
-        /// <returns></returns>
-        [HttpGet("get-active-reservations-by-sessions")]
-        public async Task<IActionResult> GetActiveReservationsBySessions(int session)
+        [HttpGet("get-active-reservations")]
+        public async Task<IActionResult> GetActiveReservations()
         {
-            int[] sessions = [0, 1, 2];
-
-            if (!sessions.Contains(session))
-                return BadRequest("Just send the value of session 0, 1 or 2");
-
-            var response = await _mediator.Send(new GetActiveReservationsBySessionQueryRequest(session));
+            var response = await _mediator.Send(new GetActiveReservationsQueryRequest());
 
             if (response.Success)
                 return Ok(response);
             else
                 return BadRequest(response);
         }
+
+        ///// <summary>
+        ///// parametre olarak 0 (sabah seansı) , 1 (öğle seansı) veya 2 (akşam seansı) yollaman lazım. (admin paneli için)
+        ///// </summary>
+        ///// <param name="session"></param>
+        ///// <returns></returns>
+        //[HttpGet("get-active-reservations-by-sessions")]
+        //public async Task<IActionResult> GetActiveReservationsBySessions(int session)
+        //{
+        //    int[] sessions = [0, 1, 2];
+
+        //    if (!sessions.Contains(session))
+        //        return BadRequest("Just send the value of session 0, 1 or 2");
+
+        //    var response = await _mediator.Send(new GetActiveReservationsBySessionQueryRequest(session));
+
+        //    if (response.Success)
+        //        return Ok(response);
+        //    else
+        //        return BadRequest(response);
+        //}
 
         [HttpPost("end-reservation-early")]
         public async Task<IActionResult> EndReservationEary([FromBody] EndReservationEarlyCommandRequest request)
@@ -110,12 +121,9 @@ namespace LibPoint.API.Controllers
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("get-reservations-by-user")]
-        public async Task<IActionResult> GetReservationsByUser([FromBody] GetReservationsByUserQueryRequest request)
+        public async Task<IActionResult> GetReservationsByUser([FromHeader] Guid appUserId)
         {
-            if (request is null)
-                return BadRequest("Request is null");
-
-            var result = await _mediator.Send(new GetReservationsByUserQueryRequest(request.AppUserId));
+            var result = await _mediator.Send(new GetReservationsByUserQueryRequest(appUserId));
 
             return result.Success ? Ok(result) : BadRequest(result);              
         }

@@ -55,7 +55,7 @@ namespace LibPoint.Infrastructure.Services.Background
                             var setSeatFreeCommandResult = await mediator.Send(setSeatFreeCommand, stoppingToken);
                         }
 
-                        var checkInEndTime = reservation.StartTime.AddMinutes(2);
+                        var checkInEndTime = reservation.StartTime.AddMinutes(10);
                         if(now > checkInEndTime && !reservation.CheckIn && !reservation.EndedByUser)
                         {
                             reservation.IsActive = false;
