@@ -37,9 +37,13 @@ namespace LibPoint.Infrastructure
                     };
                 });
 
-            services.AddAuthorization();            
+            services.AddAuthorization();
+
+            services.AddSignalR();
 
             // -- Services --
+
+            services.AddScoped<ISeatHubService, SeatHubService>();
 
             services.AddHostedService<ReservationBackgroundService>();
 

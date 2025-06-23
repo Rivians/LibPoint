@@ -4,6 +4,7 @@ using LibPoint.Application;
 using LibPoint.Domain.Constants;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using LibPoint.Infrastructure.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.WebHost.ConfigureKestrel(options =>
@@ -97,6 +98,8 @@ app.UseInfrastructureMiddlewares();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapHub<SeatHub>("/seatHub");
 
 app.MapControllers();
 

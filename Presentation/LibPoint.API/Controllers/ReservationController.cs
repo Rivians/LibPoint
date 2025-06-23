@@ -1,13 +1,9 @@
 ﻿using LibPoint.Application.Features.Reservations.Commands;
 using LibPoint.Application.Features.Reservations.Queries;
-using LibPoint.Domain.Entities.Enums;
 using LibPoint.Domain.Models.Responses;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace LibPoint.API.Controllers
 {
@@ -128,7 +124,6 @@ namespace LibPoint.API.Controllers
             return result.Success ? Ok(result) : BadRequest(result);              
         }
 
-        [Authorize]
         [HttpGet("generate-qr")]
         public async Task<IActionResult> GenerateQr(Guid reservationId)
         {

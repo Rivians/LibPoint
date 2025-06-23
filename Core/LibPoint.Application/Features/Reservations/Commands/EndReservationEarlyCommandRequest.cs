@@ -10,7 +10,7 @@ namespace LibPoint.Application.Features.Reservations.Commands
 {
     public class EndReservationEarlyCommandRequest : IRequest<ResponseModel<bool>>
     {
-        public Guid AppUserId { get; set; }
+        public Guid UserId { get; set; }         // adminde olabilir, normal kullanıcı da --- kontrol edilmesi lazım
         public Guid ReservationId { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using LibPoint.Domain.Entities;
 using LibPoint.Domain.Entities.Enums;
 using LibPoint.Domain.Models.Responses;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,13 @@ namespace LibPoint.Application.Features.Reservations.Commands
         private readonly IRepository<Reservation> _reservationRepository;
         private readonly IRepository<Seat> _seatRepository;
         private readonly IMediator _mediator;
-        public ReserveSeatWithTransactionCommandHandler(IRepository<Reservation> repository, IMediator mediator, IRepository<Seat> seatRepository)
+        private readonly ISeatHubService _seatHubService;
+        public ReserveSeatWithTransactionCommandHandler(IRepository<Reservation> repository, IMediator mediator, IRepository<Seat> seatRepository, ISeatHubService seatHubService)
         {
             _reservationRepository = repository;
             _mediator = mediator;
             _seatRepository = seatRepository;
+            _seatHubService = seatHubService;
         }
 
         public async Task<ResponseModel<bool>> Handle(ReserveSeatWithTransactionCommandRequest request, CancellationToken cancellationToken)
@@ -52,6 +55,10 @@ namespace LibPoint.Application.Features.Reservations.Commands
                 var setSeatReservedCommand = new SetSeatReservedCommandRequest(request.SeatId, request.AppUserId, reservationCreateResult.Data);
 
                 var seatReservationResult = await _mediator.Send(setSeatReservedCommand);
+
+                if (seatReservationResult.Success)
+                    await _seatHubService.NotifySeatListUpdatedAsync();  // signalR'da client'i uyardıgımız kısım burası.
+
                 return seatReservationResult.Success;
             });
 
@@ -64,7 +71,7 @@ namespace LibPoint.Application.Features.Reservations.Commands
 
             var time = localTime.TimeOfDay;
 
-            if (time >= TimeSpan.FromHours(8) && time < TimeSpan.FromHours(13))
+            if (time >= TimeSpan.FromHours(0) && time < TimeSpan.FromHours(13))
                 return 0;
             else if (time >= TimeSpan.FromHours(13) && time < TimeSpan.FromHours(18))
                 return 1;
